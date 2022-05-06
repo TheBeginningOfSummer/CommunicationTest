@@ -518,36 +518,45 @@ namespace MyToolkit
 
     public class JsonManager
     {
-        public static void SaveJsonString(string path, object data)
+        public static void SaveJsonString(string path, string fileName, object data)
         {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            path = path + "\\" + fileName + ".json";
+
             string jsonString = JsonMapper.ToJson(data);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonString);
-            FileStream file = new(path, FileMode.Create);
-            file.Write(jsonBytes, 0, jsonBytes.Length);//整块写入
+            FileStream file = new FileStream(path, FileMode.Create);
+            file.Write(jsonBytes, 0, jsonBytes.Length);//写入
             file.Flush();
             file.Close();
         }
         [return: MaybeNull]
-        public static T ReadJsonString<T>(string path)
+        public static T ReadJsonString<T>(string path, string fileName)
         {
             try
             {
-                if (File.Exists(path))
+                if (!Directory.Exists(path))
                 {
-                    FileStream file = new(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                    StreamReader stream = new(file);
-                    T jsonData = JsonMapper.ToObject<T>(stream.ReadToEnd());
-                    file.Flush();
-                    file.Close();
-                    //T jsonData = JsonMapper.ToObject<T>(File.ReadAllText(path));
-                    return jsonData;
+                    Directory.CreateDirectory(path);
                 }
+                path = path + "\\" + fileName + ".json";
+
+                FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                StreamReader stream = new StreamReader(file);
+                T jsonData = JsonMapper.ToObject<T>(stream.ReadToEnd());
+                file.Flush();
+                file.Close();
+                //T jsonData = JsonMapper.ToObject<T>(File.ReadAllText(path));
+                return jsonData;
             }
             catch (Exception)
             {
 
             }
-            return default;
+            return default(T);
         }
 
         public static JsonData ReadSimpleJsonString(string path)
