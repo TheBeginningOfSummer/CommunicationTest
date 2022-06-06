@@ -489,30 +489,22 @@ namespace MyToolkit
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), fileName);
         }
 
-        public static void AppendStreamString(string path, string message)
+        public static void AddStringStream(string path, string fileName, string message, FileMode fileMode)
         {
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            path = Path.Combine(path, fileName);
             byte[] data = Encoding.UTF8.GetBytes(message);
-            FileStream file = new(path, FileMode.Append);
+            FileStream file = new(path, fileMode);
             file.Write(data, 0, data.Length);
             file.Flush();
             file.Close();
             file.Dispose();
         }
 
-        public static void CreatStreamString(string path, string message)
-        {
-            byte[] data = Encoding.UTF8.GetBytes(message);
-            FileStream file = new(path, FileMode.Create);
-            file.Write(data, 0, data.Length);
-            file.Flush();
-            file.Close();
-            file.Dispose();
-        }
-
-        public static void AppendLog(string path, string message)
+        public static void AppendLog(string path, string fileName, string message)
         {
             string log = DateTime.Now.ToString("yyy-MM-dd HH:mm:ss") + "  " + message + Environment.NewLine;
-            AppendStreamString(path, log);
+            AddStringStream(path, fileName, log, FileMode.Append);
         }
     }
 
@@ -520,12 +512,9 @@ namespace MyToolkit
     {
         public static void SaveJsonString(string path, string fileName, object data)
         {
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            path = path + "\\" + fileName + ".json";
-
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            //path = path + "\\" + fileName + ".json";
+            path = Path.Combine(path, fileName);
             string jsonString = JsonMapper.ToJson(data);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonString);
             FileStream file = new FileStream(path, FileMode.Create);
@@ -538,12 +527,10 @@ namespace MyToolkit
         {
             try
             {
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                path = path + "\\" + fileName + ".json";
-
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                //path = path + "\\" + fileName + ".json";
+                //path += "/" + fileName;
+                path = Path.Combine(path, fileName);
                 FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 StreamReader stream = new StreamReader(file);
                 T jsonData = JsonMapper.ToObject<T>(stream.ReadToEnd());
@@ -802,17 +789,17 @@ namespace MyToolkit
                 if (head != -1 && tail != -1) break;
             }
         }
-        //得到数组开头是标记字节的索引位置（头尾索引）
-        public static void CheckPackage(byte[] sourceArray, byte[] frameMark, out int head, out int tail)
+        //得到数组开头与下一个位置是标记字节的索引位置（头尾索引）
+        public static void CheckPackage(byte[] sourceArray, byte[] packageMark, out int head, out int tail)
         {
             head = -1;
             tail = -1;
-            if (frameMark.Length > sourceArray.Length) return;
+            if (packageMark.Length > sourceArray.Length) return;
             for (int i = 0; i < sourceArray.Length; i++)
             {
-                if (i < frameMark.Length - 1)
+                if (i < packageMark.Length)
                 {
-                    for (int j = 0; j < frameMark.Length; j++)
+                    for (int j = 0; j < packageMark.Length; j++)
                     {
                         if (i + j >= sourceArray.Length)
                         {
@@ -821,26 +808,22 @@ namespace MyToolkit
                         }
                         if (head == -1)
                         {
-                            if (sourceArray[i + j] != frameMark[j])
+                            if (sourceArray[i + j] != packageMark[j])
                             {
                                 head = -1;
                                 break;
                             }
                             else
                             {
-                                if (j == frameMark.Length - 1)
-                                    head = i;
-                                if (head != 0)
-                                {
-                                    head = -1;
-                                }
+                                if (j == packageMark.Length - 1) head = i;
+                                //if (head != 0) head = -1;
                             }
                         }
                     }
                 }
                 else
                 {
-                    for (int j = 0; j < frameMark.Length; j++)
+                    for (int j = 0; j < packageMark.Length; j++)
                     {
                         if (i + j >= sourceArray.Length)
                         {
@@ -849,14 +832,14 @@ namespace MyToolkit
                         }
                         if (tail == -1)
                         {
-                            if (sourceArray[i + j] != frameMark[j])
+                            if (sourceArray[i + j] != packageMark[j])
                             {
                                 tail = -1;
                                 break;
                             }
                             else
                             {
-                                if (j == frameMark.Length - 1)
+                                if (j == packageMark.Length - 1)
                                 {
                                     tail = i;
                                 }
@@ -881,85 +864,30 @@ namespace MyToolkit
         #endregion
     }
 
-    public class BytesReceiveTool
+    public class BytesReceiveToolkit
     {
-        public int FrameTagLength = 2;
-        public int PackageLength = 0;
-        public byte[] DataCache = new byte[1024];
-        [AllowNull]
-        public Action<byte[]> ReceiveBytes;
-        //==========非静态函数==========//
+        public int PackageMarkLength;
+        public byte[] PackageMark;
+        public int PackageLength;
+        public byte[] DataCache;
+        public Action<byte[]>? ReceiveBytes;//绑定可以为空
 
-        public BytesReceiveTool()
+        public BytesReceiveToolkit()
         {
-
-        }
-        //得到数组开头标记字节的索引位置（头尾索引）
-        public static void CheckPackage(byte[] sourceArray, byte[] frameMark, out int head, out int tail)
-        {
-            head = -1;
-            tail = -1;
-            if (frameMark.Length > sourceArray.Length) return;
-            for (int i = 0; i < sourceArray.Length; i++)
-            {
-                if (i < frameMark.Length - 1)
-                {
-                    for (int j = 0; j < frameMark.Length; j++)
-                    {
-                        if (i + j >= sourceArray.Length)
-                        {
-                            head = -1;
-                            break;
-                        }
-                        if (head == -1)
-                        {
-                            if (sourceArray[i + j] != frameMark[j])
-                            {
-                                head = -1;
-                                break;
-                            }
-                            else
-                            {
-                                if (j == frameMark.Length - 1)
-                                    head = i;
-                                if (head != 0)
-                                {
-                                    head = -1;
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (int j = 0; j < frameMark.Length; j++)
-                    {
-                        if (i + j >= sourceArray.Length)
-                        {
-                            tail = -1;
-                            break;
-                        }
-                        if (tail == -1)
-                        {
-                            if (sourceArray[i + j] != frameMark[j])
-                            {
-                                tail = -1;
-                                break;
-                            }
-                            else
-                            {
-                                if (j == frameMark.Length - 1)
-                                {
-                                    tail = i;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (tail != -1) break;
-            }
+            PackageMarkLength = 2;
+            PackageMark = new byte[2] { 0x7F, 0x7F };
+            PackageLength = 0;
+            DataCache = new byte[2048];
         }
 
+        public void ClearCache()
+        {
+            PackageLength = 0;
+        }
+        /// <summary>
+        /// 将接收到的字节数组按包头包尾的标记拼包与分包
+        /// </summary>
+        /// <param name="receivedData">接收的字节数据</param>
         public void DataReceive(byte[] receivedData)
         {
             if (receivedData.Length == 0) return;
@@ -967,56 +895,34 @@ namespace MyToolkit
             //下一次接收的起始位置以及现有的数据长度
             PackageLength += receivedData.Length;
 
-            //检测数据包
-            CheckPackage(DataCache, new byte[2] { 0x7F, 0x7F }, out int head, out int tail);
-            //无帧头无帧尾,返回继续拼接
-            if (head == -1 && tail == -1) return;
-            //有帧头无帧尾,返回继续拼接
-            if (head == 0 && tail == -1) return;
-            //无帧头有帧尾
-            if (head == -1 && tail != -1)
+            while (PackageLength > 0)
             {
-                //将提取的数据消除，将后面的数据前置
-                ClearDataCache(tail + FrameTagLength);
-                //重新计算缓存区字节长度
-                PackageLength -= (tail + FrameTagLength);
+                //检测包头包尾
+                ByteArrayToolkit.CheckPackage(DataCache, PackageMark, out int head, out int tail);
+                //无包尾,返回继续拼接
+                if (tail == -1) return;
+                //有包头且在0位置
+                if (head == 0)
+                {
+                    //拼接好的数据包要放入的字节数组
+                    byte[] data = new byte[tail + PackageMarkLength];
+                    //将缓存中的数据拷贝到字节数组中
+                    Array.Copy(DataCache, 0, data, 0, tail + PackageMarkLength);
+                    //传出数据
+                    ReceiveBytes?.Invoke(data);
+                    //将提取的数据消除，将后面的数据前置
+                    ClearDataCache(tail + PackageMarkLength);
+                    //重新计算缓存区字节长度
+                    PackageLength -= (tail + PackageMarkLength);
+                }
+                else
+                {
+                    //将提取的数据消除，将后面的数据前置
+                    ClearDataCache(tail + PackageMarkLength);
+                    //重新计算缓存区字节长度
+                    PackageLength -= (tail + PackageMarkLength);
+                }
             }
-            //有帧头帧尾
-            if (head == 0 && tail != -1)
-            {
-                //拼接好的数据包要放入的字节数组
-                byte[] data = new byte[tail + FrameTagLength];
-                //将缓存中的数据拷贝到字节数组中
-                Array.Copy(DataCache, 0, data, 0, tail + FrameTagLength);
-                //传出数据
-                ReceiveBytes?.Invoke(data);
-                //将提取的数据消除，将后面的数据前置
-                ClearDataCache(tail + FrameTagLength);
-                //重新计算缓存区字节长度
-                PackageLength -= (tail + FrameTagLength);
-            }
-
-            //再次检测数据包（防止粘包）
-            CheckPackage(DataCache, new byte[2] { 0x7F, 0x7F }, out int head2, out int tail2);
-            //无帧头无帧尾,返回继续拼接
-            if (head2 == -1 && tail2 == -1) return;
-            //有帧头无帧尾,返回继续拼接
-            if (head2 == 0 && tail2 == -1) return;
-            //有帧头帧尾
-            if (head2 == 0 && tail2 != -1)
-            {
-                //拼接好的数据包要放入的字节数组
-                byte[] data = new byte[tail2 + FrameTagLength];
-                //将缓存中的数据拷贝到字节数组中
-                Array.Copy(DataCache, 0, data, 0, tail2 + FrameTagLength);
-                //传出数据
-                ReceiveBytes?.Invoke(data);
-                //将提取的数据消除，将后面的数据前置
-                ClearDataCache(tail2 + FrameTagLength);
-                //重新计算缓存区字节长度
-                PackageLength -= (tail2 + FrameTagLength);
-            }
-
         }
         /// <summary>
         /// 将指定长度的数据清除，并用后面的数据覆盖
