@@ -954,6 +954,14 @@ namespace MyToolkit
             }
             return "";
         }
+        public static string HandshakeString(int localAddress)
+        {
+            if (localAddress >= 0 && localAddress <= 255)
+            {
+                return "46494E53" + "0000000C" + "00000000" + "00000000" + "000000" + localAddress.ToString("X2");
+            }
+            return "";
+        }
 
         /// <summary>
         /// Fins协议读取PLC指定内存的数据
@@ -972,6 +980,14 @@ namespace MyToolkit
                 return "46494E53" + "0000001A" + "00000002" + "00000000" + "80" + "0002" +
                         "00" + remoteAddress + "00" + "00" + localAddress + "00" +
                         "FF0101" + memoryArea + startAddress.ToString("X4") + "00" + dataLength;
+            return "";
+        }
+        public static string ReadString(int remoteAddress, int localAddress, string memoryArea, int startAddress, int dataLength)
+        {
+            if (localAddress >= 0 && localAddress <= 255 && remoteAddress >= 0 && remoteAddress <= 255)
+                return "46494E53" + "0000001A" + "00000002" + "00000000" + "80" + "0002" +
+                        "00" + remoteAddress.ToString("X2") + "00" + "00" + localAddress.ToString("X2") + "00" +
+                        "FF0101" + memoryArea + startAddress.ToString("X4") + "00" + dataLength.ToString("X4");
             return "";
         }
 
@@ -995,6 +1011,24 @@ namespace MyToolkit
                     "00" + remoteAddress + "00" + "00" + localAddress + "00" +
                     "FF0102" + memoryArea + startAddress.ToString("X4") + "00" + dataLength.ToString("X4") + data;
             return "";
+        }
+        public static byte[] WriteByte(int remoteAddress, int localAddress, string memoryArea, int startAddress, byte[] data)
+        {
+            int codeLength = 0x0000001A + data.Length;
+            int dataLength = CalculateDataLength(data);
+            string sendString = "46494E53" + codeLength.ToString("X8") + "00000002" + "00000000" + "80" + "0002" +
+                    "00" + remoteAddress.ToString("X2") + "00" + "00" + localAddress.ToString("X2") + "00" +
+                    "FF0102" + memoryArea + startAddress.ToString("X4") + "00" + dataLength.ToString("X4");
+            return ByteArrayToolkit.SpliceBytes(DataConverter.HexStringToBytes(sendString), data);
+        }
+        public static int CalculateDataLength(byte[] data)
+        {
+            int dataLength;
+            if (data.Length % 2 != 0)
+                dataLength = data.Length / 2 + 1;
+            else
+                dataLength = data.Length / 2;
+            return dataLength;
         }
     }
 
