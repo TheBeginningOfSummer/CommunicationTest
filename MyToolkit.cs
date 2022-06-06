@@ -1172,12 +1172,19 @@ namespace MyToolkit
 
     public class TimerToolkit
     {
-        public AutoResetEvent CheckTime = new(false);
+        public AutoResetEvent CheckTime = new AutoResetEvent(false);
+        //时间组件
         public System.Threading.Timer ThreadTimer;
-        public Action? TimesUp;
+        //计数锁
+        private object countLock = new object();
 
+        //计时时间到
+        public Action? TimesUp;
+        //是否正在计时
+        public bool IsTiming { get; private set; }
+        //计时时间
         public int Timeout { get; set; }
-        public bool IsTimeout { get; set; }
+        //当前时间
         private int currentCount;
         public int CurrentCount
         {
@@ -1185,13 +1192,8 @@ namespace MyToolkit
             set
             {
                 currentCount = value;
-                TimeChange();
-                if (CurrentCount > Timeout)
-                {
-                    TimesUp?.Invoke();
-                    Stop();
-                    ClearCount();
-                }
+                TimeAutoSet();
+                TimeRunsOut();
             }
         }
 
@@ -1200,21 +1202,15 @@ namespace MyToolkit
             ThreadTimer = new System.Threading.Timer(
                 new System.Threading.TimerCallback(TimerUp), null, System.Threading.Timeout.Infinite, 1000);
             CurrentCount = 0;
-            IsTimeout = false;
+            IsTiming = false;
         }
 
         #region 基础功能
         private void TimerUp(object? value)
         {
-            CurrentCount += 1;
-        }
-        //超时自动set，在属性变化中调用
-        private void TimeChange()
-        {
-            if (CurrentCount > Timeout)
+            lock (countLock)
             {
-                IsTimeout = true;
-                CheckTime.Set();
+                CurrentCount += 1;
             }
         }
 
@@ -1230,7 +1226,10 @@ namespace MyToolkit
 
         public void ClearCount()
         {
-            CurrentCount = 0;
+            lock (countLock)
+            {
+                CurrentCount = 0;
+            }
         }
         #endregion
 
@@ -1239,7 +1238,6 @@ namespace MyToolkit
         public void Suspend(int timeout)
         {
             Timeout = timeout;
-            IsTimeout = false;
             Stop();
             ClearCount();
             Start();
@@ -1247,28 +1245,66 @@ namespace MyToolkit
             Stop();
             ClearCount();
         }
+        //超时自动set，在属性变化中调用
+        private void TimeAutoSet()
+        {
+            if (CurrentCount > Timeout)
+            {
+                CheckTime.Set();
+            }
+        }
         //未超时的手动set，外部调用
         public void TimerSet()
         {
             if (CurrentCount <= Timeout)
             {
-                IsTimeout = false;
                 CheckTime.Set();
             }
         }
         #endregion
 
         #region 计时功能
+        /// <summary>
+        /// 开始计时
+        /// </summary>
+        /// <param name="timeout"></param>
         public void Time(int timeout)
         {
             Timeout = timeout;
+            IsTiming = true;
             Stop();
             ClearCount();
             Start();
         }
-
+        /// <summary>
+        /// 时间耗尽
+        /// </summary>
+        private void TimeRunsOut()
+        {
+            if (CurrentCount > Timeout)
+            {
+                Stop();
+                ClearCount();
+                TimesUp?.Invoke();
+                IsTiming = false;
+            }
+        }
+        /// <summary>
+        /// 计时时间重置
+        /// </summary>
+        public void TimerReset()
+        {
+            if (IsTiming)
+            {
+                ClearCount();
+            }
+        }
+        /// <summary>
+        /// 计时停止
+        /// </summary>
         public void Reset()
         {
+            IsTiming = false;
             Stop();
             ClearCount();
         }
