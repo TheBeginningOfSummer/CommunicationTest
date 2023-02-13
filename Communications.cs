@@ -13,6 +13,8 @@ namespace CommunicationsToolkit
         [AllowNull]
         SocketConnection server;
         [AllowNull]
+        ModbusTCP modbus;
+        [AllowNull]
         SocketConnection client;
         readonly SerialPortConnection serialPort;
         readonly OpenFileDialog serverFile;
@@ -51,6 +53,7 @@ namespace CommunicationsToolkit
                 else if (RB_ServerHex.Checked)
                 {
                     TB_ServerReceive.AppendText(DataConverter.BytesToHexString(message) + Environment.NewLine);
+                    TB_ModbusReceive.AppendText($"[{DateTime.Now:yyyy MM-dd HH:mm:ss}]\n{DataConverter.BytesToHexString(message)}\n");
                 }
             }));
         }
@@ -92,11 +95,12 @@ namespace CommunicationsToolkit
         {
             if (!IPAddress.TryParse(TSTB_ServerIP.Text, out IPAddress? ipAddress)) return;
             if (!int.TryParse(TSTB_ServerPort.Text.Trim(), out int port)) return;
-            server = new SocketConnection();
+            modbus = new ModbusTCP(1);
+            server = modbus.Connection;
             if (server.StartListening(ipAddress, port))
             {
                 server.ClientListUpdate = UpdateClient;//客户端列表委托更新绑定
-                server.ReceiveFromClient = FromClient;//服务端数据收发委托绑定
+                server.ReceiveFromClient += FromClient;//服务端数据收发委托绑定
                 TSB_StartListening.Enabled = false;
                 TSB_StopListening.Enabled = true;
                 MessageBox.Show("监听成功", "服务端");
@@ -118,7 +122,7 @@ namespace CommunicationsToolkit
             }
         }
 
-        private void TSB_ServerClear_Click_1(object sender, EventArgs e)
+        private void TSB_ServerClear_Click(object sender, EventArgs e)
         {
             TB_ServerReceive.Clear();
             TB_ServerSend.Clear();
@@ -288,8 +292,28 @@ namespace CommunicationsToolkit
                 MessageBox.Show(ex.Message, "串口发送");
             }
         }
+
         #endregion
 
-
+        #region ModbusTCP
+        private void BTN_ModbusWrite_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (RB_HoldingRegister.Checked)
+                {
+                    ModbusTCP.SetRegister(modbus.HoldingRegister, ushort.Parse(TB_InputData.Text), ushort.Parse(TB_Address.Text));
+                }
+                else if (RB_InputRegister.Checked)
+                {
+                    ModbusTCP.SetRegister(modbus.InputRegister, ushort.Parse(TB_InputData.Text), ushort.Parse(TB_Address.Text));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        #endregion
     }
 }
