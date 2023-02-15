@@ -20,6 +20,9 @@ namespace CommunicationsToolkit
         readonly OpenFileDialog serverFile;
         readonly OpenFileDialog clientFile;
 
+        readonly List<Label> labels1 = new List<Label>();
+        readonly List<Label> labels2 = new List<Label>();
+
         public Communications()
         {
             InitializeComponent();
@@ -314,6 +317,49 @@ namespace CommunicationsToolkit
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void BTN_DisplayRegister_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(TB_MinAddress.Text, out int minAddress)) return;
+            if (!int.TryParse(TB_MaxAdress.Text, out int maxAdress)) return;
+            if (minAddress < 0) return;
+            if (maxAdress <= minAddress) return;
+            WinformToolkit.InitializeDisplayLabel(PN_ModbusTCP, maxAdress - minAddress + 1, labels1, labels2, 88);
+            for (int i = 0; i < labels1.Count; i++)
+            {
+                labels1[i].Text = (minAddress + i).ToString();
+            }
+            for (int i = 0; i < labels2.Count; i++)
+            {
+                byte[]? value = ModbusTCP.ReadRegister(modbus.HoldingRegister, (ushort)(minAddress + i));
+                if (value != null) labels2[i].Text = DataConverter.BytesToHexString(value);
+            }
+        }
+
+        private void UpdateRegister()
+        {
+            while (true)
+            {
+                try
+                {
+                    Thread.Sleep(500);
+                    if (labels1.Count == 0) continue;
+                    if (labels2.Count == 0) continue;
+                    if (modbus == null) continue;
+                    for (int i = 0; i < labels2.Count; i++)
+                    {
+                        //byte[]? value = ModbusTCP.ReadRegister(modbus.HoldingRegister, (ushort)(minAddress + i));
+                        //if (value != null) labels2[i].Text = DataConverter.BytesToHexString(value);
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
         #endregion
+
+
     }
 }

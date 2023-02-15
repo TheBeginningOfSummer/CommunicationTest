@@ -51,7 +51,7 @@ namespace CommunicationsToolkit
         {
             if (address < 0 || address >= 10000) return null;
             if (10000 - address < amount) return null;
-            return register.Skip(address).Take(amount * 2).ToArray();
+            return register.Skip(address * 2).Take(amount * 2).ToArray();
         }
         /// <summary>
         /// 更改寄存器值
