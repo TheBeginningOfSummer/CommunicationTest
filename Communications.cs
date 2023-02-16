@@ -320,6 +320,7 @@ namespace CommunicationsToolkit
 
         private void BTN_DisplayRegister_Click(object sender, EventArgs e)
         {
+            if (modbus == null) return;
             if (!int.TryParse(TB_MinAddress.Text, out int minAddress)) return;
             if (!int.TryParse(TB_MaxAdress.Text, out int maxAdress)) return;
             if (minAddress < 0) return;

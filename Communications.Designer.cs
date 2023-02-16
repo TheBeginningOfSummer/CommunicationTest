@@ -73,14 +73,13 @@
             this.TSB_CloseSerialPort = new System.Windows.Forms.ToolStripButton();
             this.TSB_Set = new System.Windows.Forms.ToolStripButton();
             this.TP_ModbusTCP = new System.Windows.Forms.TabPage();
-            this.BTN_ModbusSend = new System.Windows.Forms.Button();
-            this.TB_ModbusSend = new System.Windows.Forms.TextBox();
-            this.PN_ModbusTCP = new System.Windows.Forms.Panel();
             this.BTN_DisplayRegister = new System.Windows.Forms.Button();
+            this.BTN_ModbusSend = new System.Windows.Forms.Button();
             this.LB_连接符 = new System.Windows.Forms.Label();
+            this.TB_ModbusSend = new System.Windows.Forms.TextBox();
             this.TB_MaxAdress = new System.Windows.Forms.TextBox();
+            this.PN_ModbusTCP = new System.Windows.Forms.Panel();
             this.TB_MinAddress = new System.Windows.Forms.TextBox();
-            this.LB_地址显示范围 = new System.Windows.Forms.Label();
             this.GB_DataInput = new System.Windows.Forms.GroupBox();
             this.RB_InputRegister = new System.Windows.Forms.RadioButton();
             this.RB_HoldingRegister = new System.Windows.Forms.RadioButton();
@@ -89,7 +88,11 @@
             this.LB_数据地址 = new System.Windows.Forms.Label();
             this.TB_Address = new System.Windows.Forms.TextBox();
             this.TB_InputData = new System.Windows.Forms.TextBox();
+            this.LB_地址显示范围 = new System.Windows.Forms.Label();
             this.TB_ModbusReceive = new System.Windows.Forms.TextBox();
+            this.TP_FinsTCPServer = new System.Windows.Forms.TabPage();
+            this.BTN_StartFins = new System.Windows.Forms.Button();
+            this.BTN_StopFins = new System.Windows.Forms.Button();
             this.TC_Communications.SuspendLayout();
             this.TP_TCPServer.SuspendLayout();
             this.TS_TCPServer.SuspendLayout();
@@ -99,6 +102,7 @@
             this.TS_SerialPort.SuspendLayout();
             this.TP_ModbusTCP.SuspendLayout();
             this.GB_DataInput.SuspendLayout();
+            this.TP_FinsTCPServer.SuspendLayout();
             this.SuspendLayout();
             // 
             // TC_Communications
@@ -110,6 +114,7 @@
             this.TC_Communications.Controls.Add(this.TP_TCPClient);
             this.TC_Communications.Controls.Add(this.TP_SerialPort);
             this.TC_Communications.Controls.Add(this.TP_ModbusTCP);
+            this.TC_Communications.Controls.Add(this.TP_FinsTCPServer);
             this.TC_Communications.Location = new System.Drawing.Point(2, 2);
             this.TC_Communications.Multiline = true;
             this.TC_Communications.Name = "TC_Communications";
@@ -611,6 +616,17 @@
             this.TP_ModbusTCP.Text = "ModbusTCP";
             this.TP_ModbusTCP.UseVisualStyleBackColor = true;
             // 
+            // BTN_DisplayRegister
+            // 
+            this.BTN_DisplayRegister.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.BTN_DisplayRegister.Location = new System.Drawing.Point(223, 364);
+            this.BTN_DisplayRegister.Name = "BTN_DisplayRegister";
+            this.BTN_DisplayRegister.Size = new System.Drawing.Size(75, 23);
+            this.BTN_DisplayRegister.TabIndex = 4;
+            this.BTN_DisplayRegister.Text = "显示";
+            this.BTN_DisplayRegister.UseVisualStyleBackColor = true;
+            this.BTN_DisplayRegister.Click += new System.EventHandler(this.BTN_DisplayRegister_Click);
+            // 
             // BTN_ModbusSend
             // 
             this.BTN_ModbusSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -621,6 +637,16 @@
             this.BTN_ModbusSend.Text = "发送";
             this.BTN_ModbusSend.UseVisualStyleBackColor = true;
             // 
+            // LB_连接符
+            // 
+            this.LB_连接符.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LB_连接符.AutoSize = true;
+            this.LB_连接符.Location = new System.Drawing.Point(144, 366);
+            this.LB_连接符.Name = "LB_连接符";
+            this.LB_连接符.Size = new System.Drawing.Size(17, 17);
+            this.LB_连接符.TabIndex = 3;
+            this.LB_连接符.Text = "~";
+            // 
             // TB_ModbusSend
             // 
             this.TB_ModbusSend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -629,6 +655,15 @@
             this.TB_ModbusSend.Name = "TB_ModbusSend";
             this.TB_ModbusSend.Size = new System.Drawing.Size(576, 23);
             this.TB_ModbusSend.TabIndex = 3;
+            // 
+            // TB_MaxAdress
+            // 
+            this.TB_MaxAdress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TB_MaxAdress.Location = new System.Drawing.Point(167, 363);
+            this.TB_MaxAdress.Name = "TB_MaxAdress";
+            this.TB_MaxAdress.Size = new System.Drawing.Size(50, 23);
+            this.TB_MaxAdress.TabIndex = 2;
+            this.TB_MaxAdress.Text = "20";
             // 
             // PN_ModbusTCP
             // 
@@ -641,36 +676,6 @@
             this.PN_ModbusTCP.Size = new System.Drawing.Size(576, 351);
             this.PN_ModbusTCP.TabIndex = 2;
             // 
-            // BTN_DisplayRegister
-            // 
-            this.BTN_DisplayRegister.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.BTN_DisplayRegister.Location = new System.Drawing.Point(223, 364);
-            this.BTN_DisplayRegister.Name = "BTN_DisplayRegister";
-            this.BTN_DisplayRegister.Size = new System.Drawing.Size(75, 23);
-            this.BTN_DisplayRegister.TabIndex = 4;
-            this.BTN_DisplayRegister.Text = "显示";
-            this.BTN_DisplayRegister.UseVisualStyleBackColor = true;
-            this.BTN_DisplayRegister.Click += new System.EventHandler(this.BTN_DisplayRegister_Click);
-            // 
-            // LB_连接符
-            // 
-            this.LB_连接符.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LB_连接符.AutoSize = true;
-            this.LB_连接符.Location = new System.Drawing.Point(144, 366);
-            this.LB_连接符.Name = "LB_连接符";
-            this.LB_连接符.Size = new System.Drawing.Size(17, 17);
-            this.LB_连接符.TabIndex = 3;
-            this.LB_连接符.Text = "~";
-            // 
-            // TB_MaxAdress
-            // 
-            this.TB_MaxAdress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TB_MaxAdress.Location = new System.Drawing.Point(167, 363);
-            this.TB_MaxAdress.Name = "TB_MaxAdress";
-            this.TB_MaxAdress.Size = new System.Drawing.Size(50, 23);
-            this.TB_MaxAdress.TabIndex = 2;
-            this.TB_MaxAdress.Text = "20";
-            // 
             // TB_MinAddress
             // 
             this.TB_MinAddress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -679,16 +684,6 @@
             this.TB_MinAddress.Size = new System.Drawing.Size(50, 23);
             this.TB_MinAddress.TabIndex = 1;
             this.TB_MinAddress.Text = "0";
-            // 
-            // LB_地址显示范围
-            // 
-            this.LB_地址显示范围.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.LB_地址显示范围.AutoSize = true;
-            this.LB_地址显示范围.Location = new System.Drawing.Point(6, 369);
-            this.LB_地址显示范围.Name = "LB_地址显示范围";
-            this.LB_地址显示范围.Size = new System.Drawing.Size(80, 17);
-            this.LB_地址显示范围.TabIndex = 0;
-            this.LB_地址显示范围.Text = "地址显示范围";
             // 
             // GB_DataInput
             // 
@@ -771,6 +766,16 @@
             this.TB_InputData.Size = new System.Drawing.Size(69, 23);
             this.TB_InputData.TabIndex = 12;
             // 
+            // LB_地址显示范围
+            // 
+            this.LB_地址显示范围.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.LB_地址显示范围.AutoSize = true;
+            this.LB_地址显示范围.Location = new System.Drawing.Point(6, 369);
+            this.LB_地址显示范围.Name = "LB_地址显示范围";
+            this.LB_地址显示范围.Size = new System.Drawing.Size(80, 17);
+            this.LB_地址显示范围.TabIndex = 0;
+            this.LB_地址显示范围.Text = "地址显示范围";
+            // 
             // TB_ModbusReceive
             // 
             this.TB_ModbusReceive.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -780,6 +785,36 @@
             this.TB_ModbusReceive.Name = "TB_ModbusReceive";
             this.TB_ModbusReceive.Size = new System.Drawing.Size(197, 259);
             this.TB_ModbusReceive.TabIndex = 0;
+            // 
+            // TP_FinsTCPServer
+            // 
+            this.TP_FinsTCPServer.Controls.Add(this.BTN_StopFins);
+            this.TP_FinsTCPServer.Controls.Add(this.BTN_StartFins);
+            this.TP_FinsTCPServer.Location = new System.Drawing.Point(4, 24);
+            this.TP_FinsTCPServer.Name = "TP_FinsTCPServer";
+            this.TP_FinsTCPServer.Padding = new System.Windows.Forms.Padding(3);
+            this.TP_FinsTCPServer.Size = new System.Drawing.Size(791, 420);
+            this.TP_FinsTCPServer.TabIndex = 5;
+            this.TP_FinsTCPServer.Text = "FinsTCPServer";
+            this.TP_FinsTCPServer.UseVisualStyleBackColor = true;
+            // 
+            // BTN_StartFins
+            // 
+            this.BTN_StartFins.Location = new System.Drawing.Point(693, 6);
+            this.BTN_StartFins.Name = "BTN_StartFins";
+            this.BTN_StartFins.Size = new System.Drawing.Size(92, 23);
+            this.BTN_StartFins.TabIndex = 0;
+            this.BTN_StartFins.Text = "返回Fins报文";
+            this.BTN_StartFins.UseVisualStyleBackColor = true;
+            // 
+            // BTN_StopFins
+            // 
+            this.BTN_StopFins.Location = new System.Drawing.Point(693, 35);
+            this.BTN_StopFins.Name = "BTN_StopFins";
+            this.BTN_StopFins.Size = new System.Drawing.Size(92, 23);
+            this.BTN_StopFins.TabIndex = 1;
+            this.BTN_StopFins.Text = "停止返回报文";
+            this.BTN_StopFins.UseVisualStyleBackColor = true;
             // 
             // Communications
             // 
@@ -807,6 +842,7 @@
             this.TP_ModbusTCP.PerformLayout();
             this.GB_DataInput.ResumeLayout(false);
             this.GB_DataInput.PerformLayout();
+            this.TP_FinsTCPServer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -874,5 +910,8 @@
         private TextBox TB_MaxAdress;
         private TextBox TB_MinAddress;
         private Button BTN_DisplayRegister;
+        private TabPage TP_FinsTCPServer;
+        private Button BTN_StopFins;
+        private Button BTN_StartFins;
     }
 }
