@@ -91,8 +91,8 @@
             this.LB_地址显示范围 = new System.Windows.Forms.Label();
             this.TB_ModbusReceive = new System.Windows.Forms.TextBox();
             this.TP_FinsTCPServer = new System.Windows.Forms.TabPage();
-            this.BTN_StartFins = new System.Windows.Forms.Button();
             this.BTN_StopFins = new System.Windows.Forms.Button();
+            this.BTN_StartFins = new System.Windows.Forms.Button();
             this.TC_Communications.SuspendLayout();
             this.TP_TCPServer.SuspendLayout();
             this.TS_TCPServer.SuspendLayout();
@@ -664,6 +664,7 @@
             this.TB_MaxAdress.Size = new System.Drawing.Size(50, 23);
             this.TB_MaxAdress.TabIndex = 2;
             this.TB_MaxAdress.Text = "20";
+            this.TB_MaxAdress.TextChanged += new System.EventHandler(this.TB_MaxAdress_TextChanged);
             // 
             // PN_ModbusTCP
             // 
@@ -684,6 +685,7 @@
             this.TB_MinAddress.Size = new System.Drawing.Size(50, 23);
             this.TB_MinAddress.TabIndex = 1;
             this.TB_MinAddress.Text = "0";
+            this.TB_MinAddress.TextChanged += new System.EventHandler(this.TB_MinAddress_TextChanged);
             // 
             // GB_DataInput
             // 
@@ -798,15 +800,6 @@
             this.TP_FinsTCPServer.Text = "FinsTCPServer";
             this.TP_FinsTCPServer.UseVisualStyleBackColor = true;
             // 
-            // BTN_StartFins
-            // 
-            this.BTN_StartFins.Location = new System.Drawing.Point(693, 6);
-            this.BTN_StartFins.Name = "BTN_StartFins";
-            this.BTN_StartFins.Size = new System.Drawing.Size(92, 23);
-            this.BTN_StartFins.TabIndex = 0;
-            this.BTN_StartFins.Text = "返回Fins报文";
-            this.BTN_StartFins.UseVisualStyleBackColor = true;
-            // 
             // BTN_StopFins
             // 
             this.BTN_StopFins.Location = new System.Drawing.Point(693, 35);
@@ -815,6 +808,15 @@
             this.BTN_StopFins.TabIndex = 1;
             this.BTN_StopFins.Text = "停止返回报文";
             this.BTN_StopFins.UseVisualStyleBackColor = true;
+            // 
+            // BTN_StartFins
+            // 
+            this.BTN_StartFins.Location = new System.Drawing.Point(693, 6);
+            this.BTN_StartFins.Name = "BTN_StartFins";
+            this.BTN_StartFins.Size = new System.Drawing.Size(92, 23);
+            this.BTN_StartFins.TabIndex = 0;
+            this.BTN_StartFins.Text = "返回Fins报文";
+            this.BTN_StartFins.UseVisualStyleBackColor = true;
             // 
             // Communications
             // 

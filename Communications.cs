@@ -22,6 +22,8 @@ namespace CommunicationsToolkit
 
         readonly List<Label> labels1 = new List<Label>();
         readonly List<Label> labels2 = new List<Label>();
+        int minAddress = 0;
+        int maxAddress = 20;
 
         public Communications()
         {
@@ -30,6 +32,7 @@ namespace CommunicationsToolkit
             serialPort.ReceivedByte = FromSerialPort;
             serverFile = new();
             clientFile = new();
+            UpdateRegister();
         }
 
         #region 消息更新
@@ -57,6 +60,8 @@ namespace CommunicationsToolkit
                 {
                     TB_ServerReceive.AppendText(DataConverter.BytesToHexString(message) + Environment.NewLine);
                     TB_ModbusReceive.AppendText($"[{DateTime.Now:yyyy MM-dd HH:mm:ss}]\n{DataConverter.BytesToHexString(message)}\n");
+                    if (TB_ServerReceive.Text.Length > 10000) TB_ServerReceive.Clear();
+                    if (TB_ModbusReceive.Text.Length > 10000) TB_ModbusReceive.Clear();
                 }
             }));
         }
@@ -321,43 +326,81 @@ namespace CommunicationsToolkit
         private void BTN_DisplayRegister_Click(object sender, EventArgs e)
         {
             if (modbus == null) return;
-            if (!int.TryParse(TB_MinAddress.Text, out int minAddress)) return;
-            if (!int.TryParse(TB_MaxAdress.Text, out int maxAdress)) return;
-            if (minAddress < 0) return;
-            if (maxAdress <= minAddress) return;
-            WinformToolkit.InitializeDisplayLabel(PN_ModbusTCP, maxAdress - minAddress + 1, labels1, labels2, 88);
+            UpdateLabels();
+        }
+
+        private void UpdateLabels()
+        {
+            WinformToolkit.InitializeDisplayLabel(PN_ModbusTCP, maxAddress - minAddress + 1, labels1, labels2, 88);
             for (int i = 0; i < labels1.Count; i++)
             {
                 labels1[i].Text = (minAddress + i).ToString();
             }
-            for (int i = 0; i < labels2.Count; i++)
-            {
-                byte[]? value = ModbusTCP.ReadRegister(modbus.HoldingRegister, (ushort)(minAddress + i));
-                if (value != null) labels2[i].Text = DataConverter.BytesToHexString(value);
-            }
+            if (RB_HoldingRegister.Checked)
+                for (int i = 0; i < labels2.Count; i++)
+                {
+                    byte[]? value = ModbusTCP.ReadRegister(modbus.HoldingRegister, (ushort)(minAddress + i));
+                    if (value != null) labels2[i].Text = DataConverter.BytesToHexString(value);
+                }
+            else if (RB_InputRegister.Checked)
+                for (int i = 0; i < labels2.Count; i++)
+                {
+                    byte[]? value = ModbusTCP.ReadRegister(modbus.InputRegister, (ushort)(minAddress + i));
+                    if (value != null) labels2[i].Invoke(new Action(() => labels2[i].Text = DataConverter.BytesToHexString(value)));
+                }
         }
 
         private void UpdateRegister()
         {
-            while (true)
+            Task.Run(() =>
             {
-                try
+                while (true)
                 {
-                    Thread.Sleep(500);
-                    if (labels1.Count == 0) continue;
-                    if (labels2.Count == 0) continue;
-                    if (modbus == null) continue;
-                    for (int i = 0; i < labels2.Count; i++)
+                    try
                     {
-                        //byte[]? value = ModbusTCP.ReadRegister(modbus.HoldingRegister, (ushort)(minAddress + i));
-                        //if (value != null) labels2[i].Text = DataConverter.BytesToHexString(value);
+                        Thread.Sleep(500);
+                        if (labels1.Count == 0) continue;
+                        if (labels2.Count == 0) continue;
+                        if (modbus == null) continue;
+                        if (RB_HoldingRegister.Checked)
+                            for (int i = 0; i < labels2.Count; i++)
+                            {
+                                byte[]? value = ModbusTCP.ReadRegister(modbus.HoldingRegister, (ushort)(minAddress + i));
+                                if (value != null) labels2[i].Invoke(new Action(() => labels2[i].Text = DataConverter.BytesToHexString(value)));
+                            }
+                        else if (RB_InputRegister.Checked)
+                            for (int i = 0; i < labels2.Count; i++)
+                            {
+                                byte[]? value = ModbusTCP.ReadRegister(modbus.InputRegister, (ushort)(minAddress + i));
+                                if (value != null) labels2[i].Invoke(new Action(() => labels2[i].Text = DataConverter.BytesToHexString(value)));
+                            }
+                    }
+                    catch (Exception)
+                    {
+
                     }
                 }
-                catch (Exception)
-                {
+            });
+        }
 
-                }
-            }
+        private void TB_MinAddress_TextChanged(object sender, EventArgs e)
+        {
+            if (modbus == null) return;
+            if (!int.TryParse(TB_MinAddress.Text, out int min)) return;
+            minAddress = min;
+            if (minAddress < 0) return;
+            if (maxAddress < minAddress) return;
+            UpdateLabels();
+        }
+
+        private void TB_MaxAdress_TextChanged(object sender, EventArgs e)
+        {
+            if (modbus == null) return;
+            if (!int.TryParse(TB_MaxAdress.Text, out int max)) return;
+            maxAddress = max;
+            if (minAddress < 0) return;
+            if (maxAddress < minAddress) return;
+            UpdateLabels();
         }
         #endregion
 
