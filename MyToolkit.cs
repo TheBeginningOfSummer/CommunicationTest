@@ -240,6 +240,10 @@ namespace MyToolkit
                     try
                     {
                         length = socketClient.Receive(DataCache);//plc设置的通信数据区字节数
+                        if (!ClientDic.ContainsKey(socketClient.RemoteEndPoint!.ToString()!))
+                        {
+                            ClientDic.Add(socketClient.RemoteEndPoint!.ToString()!, socketClient);
+                        }
                     }
                     catch (Exception)
                     {
@@ -253,6 +257,10 @@ namespace MyToolkit
                     {
                         byte[] result = GetByteArray(DataCache, 0, length);//读取plc通信区的数据——写入区和数据读取区并截取
                         ReceiveFromClient?.Invoke(socketClient, result);//服务端应答委托//服务端应答委托
+                        if (!ClientDic.ContainsKey(socketClient.RemoteEndPoint!.ToString()!))
+                        {
+                            ClientDic.Add(socketClient.RemoteEndPoint!.ToString()!, socketClient);
+                        }
                     }
                     else
                     {

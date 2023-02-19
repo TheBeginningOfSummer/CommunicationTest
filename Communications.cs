@@ -10,12 +10,16 @@ namespace CommunicationsToolkit
 {
     public partial class Communications : Form
     {
+        #region TCP连接及协议
         [AllowNull]
         SocketConnection server;
         [AllowNull]
         ModbusTCP modbus;
         [AllowNull]
+        FinsTCPServer fins;
+        [AllowNull]
         SocketConnection client;
+        #endregion
         readonly SerialPortConnection serialPort;
         readonly OpenFileDialog serverFile;
         readonly OpenFileDialog clientFile;
@@ -60,8 +64,8 @@ namespace CommunicationsToolkit
                 {
                     TB_ServerReceive.AppendText(DataConverter.BytesToHexString(message) + Environment.NewLine);
                     TB_ModbusReceive.AppendText($"[{DateTime.Now:yyyy MM-dd HH:mm:ss}]\n{DataConverter.BytesToHexString(message)}\n");
-                    if (TB_ServerReceive.Text.Length > 10000) TB_ServerReceive.Clear();
-                    if (TB_ModbusReceive.Text.Length > 10000) TB_ModbusReceive.Clear();
+                    if (TB_ServerReceive.Text.Length > 99999) TB_ServerReceive.Clear();
+                    if (TB_ModbusReceive.Text.Length > 99999) TB_ModbusReceive.Clear();
                 }
             }));
         }
@@ -98,13 +102,84 @@ namespace CommunicationsToolkit
         }
         #endregion
 
+        #region 串口
+        private void TSB_OpenSerialPort_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(ConfigurationManager.AppSettings["BaudRate"]!.ToString(), out int baudRate)) return;
+            string port = ConfigurationManager.AppSettings["Port"]!.ToString();
+            if (serialPort.OpenMySerialPort(baudRate, port, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One))
+            {
+                TSB_OpenSerialPort.Enabled = false;
+                TSB_CloseSerialPort.Enabled = true;
+                MessageBox.Show("打开成功", "串口");
+            }
+            else
+            {
+                MessageBox.Show("打开失败", "串口");
+            }
+        }
+
+        private void TSB_CloseSerialPort_Click(object sender, EventArgs e)
+        {
+            if (serialPort.CloseMySerialPort())
+            {
+                TSB_OpenSerialPort.Enabled = true;
+                TSB_CloseSerialPort.Enabled = false;
+                MessageBox.Show("关闭成功", "串口");
+            }
+            else
+            {
+                MessageBox.Show("关闭失败", "串口");
+            }
+        }
+
+        private void TSB_Set_Click(object sender, EventArgs e)
+        {
+            new SerialPortSet().ShowDialog();
+        }
+
+        private void BTN_SerialPortSend_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (RB_UTF8.Checked)
+                    serialPort.SendMessage(TB_SerialPortSend.Text);
+                else if (RB_Hex.Checked)
+                    serialPort.MySerialPort.Write(DataConverter.HexStringToBytes(TB_SerialPortSend.Text), 0, DataConverter.HexStringToBytes(TB_SerialPortSend.Text).Length);
+                else if (RB_ASCII.Checked)
+                    serialPort.MySerialPort.Write(Encoding.ASCII.GetBytes(TB_SerialPortSend.Text), 0, Encoding.ASCII.GetBytes(TB_SerialPortSend.Text).Length);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "串口发送");
+            }
+        }
+
+        #endregion
+
         #region 服务端
         private void TSB_StartListening_Click(object sender, EventArgs e)
         {
             if (!IPAddress.TryParse(TSTB_ServerIP.Text, out IPAddress? ipAddress)) return;
             if (!int.TryParse(TSTB_ServerPort.Text.Trim(), out int port)) return;
-            modbus = new ModbusTCP(1);
-            server = modbus.Connection;
+            if (RB_NoProtocol.Checked)
+            {
+                server = new SocketConnection();
+            }
+            else if (RB_Modbus.Checked)
+            {
+                modbus = new ModbusTCP(1);
+                server = modbus.Connection;
+            }
+            else if (RB_Fins.Checked)
+            {
+                fins = new FinsTCPServer(10);
+                server = fins.Connection;
+            }
+            else
+            {
+                return;
+            }
             if (server.StartListening(ipAddress, port))
             {
                 server.ClientListUpdate = UpdateClient;//客户端列表委托更新绑定
@@ -113,6 +188,7 @@ namespace CommunicationsToolkit
                 TSB_StopListening.Enabled = true;
                 MessageBox.Show("监听成功", "服务端");
             }
+            LB_DArea.Text = Encoding.ASCII.GetString(FinsTCPServer.WordByteReverse(DataConverter.HexStringToBytes("313035313A313B31")));
         }
 
         private void TSB_StopListening_Click(object sender, EventArgs e)
@@ -244,61 +320,6 @@ namespace CommunicationsToolkit
         {
             if (!(e.KeyChar == '\b' || (e.KeyChar >= '0' && e.KeyChar <= '9')))
                 e.Handled = true;
-        }
-
-        #endregion
-
-        #region 串口
-        private void TSB_OpenSerialPort_Click(object sender, EventArgs e)
-        {
-            if (!int.TryParse(ConfigurationManager.AppSettings["BaudRate"]!.ToString(), out int baudRate)) return;
-            string port = ConfigurationManager.AppSettings["Port"]!.ToString();
-            if (serialPort.OpenMySerialPort(baudRate, port, 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One))
-            {
-                TSB_OpenSerialPort.Enabled = false;
-                TSB_CloseSerialPort.Enabled = true;
-                MessageBox.Show("打开成功", "串口");
-            }
-            else
-            {
-                MessageBox.Show("打开失败", "串口");
-            }
-        }
-
-        private void TSB_CloseSerialPort_Click(object sender, EventArgs e)
-        {
-            if (serialPort.CloseMySerialPort())
-            {
-                TSB_OpenSerialPort.Enabled = true;
-                TSB_CloseSerialPort.Enabled = false;
-                MessageBox.Show("关闭成功", "串口");
-            }
-            else
-            {
-                MessageBox.Show("关闭失败", "串口");
-            }
-        }
-
-        private void TSB_Set_Click(object sender, EventArgs e)
-        {
-            new SerialPortSet().ShowDialog();
-        }
-
-        private void BTN_SerialPortSend_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (RB_UTF8.Checked)
-                    serialPort.SendMessage(TB_SerialPortSend.Text);
-                else if (RB_Hex.Checked)
-                    serialPort.MySerialPort.Write(DataConverter.HexStringToBytes(TB_SerialPortSend.Text), 0, DataConverter.HexStringToBytes(TB_SerialPortSend.Text).Length);
-                else if (RB_ASCII.Checked)
-                    serialPort.MySerialPort.Write(Encoding.ASCII.GetBytes(TB_SerialPortSend.Text), 0, Encoding.ASCII.GetBytes(TB_SerialPortSend.Text).Length);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "串口发送");
-            }
         }
 
         #endregion

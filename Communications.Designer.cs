@@ -31,10 +31,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Communications));
             this.TC_Communications = new System.Windows.Forms.TabControl();
             this.TP_TCPServer = new System.Windows.Forms.TabPage();
+            this.GB_ShowCode = new System.Windows.Forms.GroupBox();
+            this.RB_ServerUTF8 = new System.Windows.Forms.RadioButton();
+            this.RB_ServerHex = new System.Windows.Forms.RadioButton();
+            this.GB_Protocol = new System.Windows.Forms.GroupBox();
+            this.RB_Fins = new System.Windows.Forms.RadioButton();
+            this.RB_Modbus = new System.Windows.Forms.RadioButton();
+            this.RB_NoProtocol = new System.Windows.Forms.RadioButton();
             this.BTN_ServerOpen = new System.Windows.Forms.Button();
             this.BTN_ServerSend = new System.Windows.Forms.Button();
-            this.RB_ServerHex = new System.Windows.Forms.RadioButton();
-            this.RB_ServerUTF8 = new System.Windows.Forms.RadioButton();
             this.TB_ServerSend = new System.Windows.Forms.TextBox();
             this.TB_ServerReceive = new System.Windows.Forms.TextBox();
             this.LB_ClientList = new System.Windows.Forms.ListBox();
@@ -91,10 +96,16 @@
             this.LB_地址显示范围 = new System.Windows.Forms.Label();
             this.TB_ModbusReceive = new System.Windows.Forms.TextBox();
             this.TP_FinsTCPServer = new System.Windows.Forms.TabPage();
+            this.LB_DArea = new System.Windows.Forms.Label();
             this.BTN_StopFins = new System.Windows.Forms.Button();
             this.BTN_StartFins = new System.Windows.Forms.Button();
+            this.GB_FinsServerWArea = new System.Windows.Forms.GroupBox();
+            this.GB_FinsServerDArea = new System.Windows.Forms.GroupBox();
+            this.GB_FinsServerHArea = new System.Windows.Forms.GroupBox();
             this.TC_Communications.SuspendLayout();
             this.TP_TCPServer.SuspendLayout();
+            this.GB_ShowCode.SuspendLayout();
+            this.GB_Protocol.SuspendLayout();
             this.TS_TCPServer.SuspendLayout();
             this.TP_TCPClient.SuspendLayout();
             this.TS_TCPClient.SuspendLayout();
@@ -125,10 +136,10 @@
             // 
             // TP_TCPServer
             // 
+            this.TP_TCPServer.Controls.Add(this.GB_ShowCode);
+            this.TP_TCPServer.Controls.Add(this.GB_Protocol);
             this.TP_TCPServer.Controls.Add(this.BTN_ServerOpen);
             this.TP_TCPServer.Controls.Add(this.BTN_ServerSend);
-            this.TP_TCPServer.Controls.Add(this.RB_ServerHex);
-            this.TP_TCPServer.Controls.Add(this.RB_ServerUTF8);
             this.TP_TCPServer.Controls.Add(this.TB_ServerSend);
             this.TP_TCPServer.Controls.Add(this.TB_ServerReceive);
             this.TP_TCPServer.Controls.Add(this.LB_ClientList);
@@ -141,6 +152,89 @@
             this.TP_TCPServer.TabIndex = 1;
             this.TP_TCPServer.Text = "服务端";
             this.TP_TCPServer.UseVisualStyleBackColor = true;
+            // 
+            // GB_ShowCode
+            // 
+            this.GB_ShowCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.GB_ShowCode.Controls.Add(this.RB_ServerUTF8);
+            this.GB_ShowCode.Controls.Add(this.RB_ServerHex);
+            this.GB_ShowCode.Location = new System.Drawing.Point(708, 26);
+            this.GB_ShowCode.Name = "GB_ShowCode";
+            this.GB_ShowCode.Size = new System.Drawing.Size(82, 100);
+            this.GB_ShowCode.TabIndex = 9;
+            this.GB_ShowCode.TabStop = false;
+            this.GB_ShowCode.Text = "显示编码";
+            // 
+            // RB_ServerUTF8
+            // 
+            this.RB_ServerUTF8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RB_ServerUTF8.AutoSize = true;
+            this.RB_ServerUTF8.Checked = true;
+            this.RB_ServerUTF8.Location = new System.Drawing.Point(14, 22);
+            this.RB_ServerUTF8.Name = "RB_ServerUTF8";
+            this.RB_ServerUTF8.Size = new System.Drawing.Size(55, 21);
+            this.RB_ServerUTF8.TabIndex = 4;
+            this.RB_ServerUTF8.TabStop = true;
+            this.RB_ServerUTF8.Text = "UTF8";
+            this.RB_ServerUTF8.UseVisualStyleBackColor = true;
+            // 
+            // RB_ServerHex
+            // 
+            this.RB_ServerHex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.RB_ServerHex.AutoSize = true;
+            this.RB_ServerHex.Location = new System.Drawing.Point(14, 49);
+            this.RB_ServerHex.Name = "RB_ServerHex";
+            this.RB_ServerHex.Size = new System.Drawing.Size(48, 21);
+            this.RB_ServerHex.TabIndex = 5;
+            this.RB_ServerHex.Text = "Hex";
+            this.RB_ServerHex.UseVisualStyleBackColor = true;
+            // 
+            // GB_Protocol
+            // 
+            this.GB_Protocol.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.GB_Protocol.Controls.Add(this.RB_Fins);
+            this.GB_Protocol.Controls.Add(this.RB_Modbus);
+            this.GB_Protocol.Controls.Add(this.RB_NoProtocol);
+            this.GB_Protocol.Location = new System.Drawing.Point(708, 132);
+            this.GB_Protocol.Name = "GB_Protocol";
+            this.GB_Protocol.Size = new System.Drawing.Size(83, 100);
+            this.GB_Protocol.TabIndex = 8;
+            this.GB_Protocol.TabStop = false;
+            this.GB_Protocol.Text = "协议";
+            // 
+            // RB_Fins
+            // 
+            this.RB_Fins.AutoSize = true;
+            this.RB_Fins.Location = new System.Drawing.Point(6, 73);
+            this.RB_Fins.Name = "RB_Fins";
+            this.RB_Fins.Size = new System.Drawing.Size(48, 21);
+            this.RB_Fins.TabIndex = 10;
+            this.RB_Fins.TabStop = true;
+            this.RB_Fins.Text = "Fins";
+            this.RB_Fins.UseVisualStyleBackColor = true;
+            // 
+            // RB_Modbus
+            // 
+            this.RB_Modbus.AutoSize = true;
+            this.RB_Modbus.Location = new System.Drawing.Point(6, 49);
+            this.RB_Modbus.Name = "RB_Modbus";
+            this.RB_Modbus.Size = new System.Drawing.Size(75, 21);
+            this.RB_Modbus.TabIndex = 1;
+            this.RB_Modbus.TabStop = true;
+            this.RB_Modbus.Text = "Modbus";
+            this.RB_Modbus.UseVisualStyleBackColor = true;
+            // 
+            // RB_NoProtocol
+            // 
+            this.RB_NoProtocol.AutoSize = true;
+            this.RB_NoProtocol.Checked = true;
+            this.RB_NoProtocol.Location = new System.Drawing.Point(6, 22);
+            this.RB_NoProtocol.Name = "RB_NoProtocol";
+            this.RB_NoProtocol.Size = new System.Drawing.Size(62, 21);
+            this.RB_NoProtocol.TabIndex = 0;
+            this.RB_NoProtocol.TabStop = true;
+            this.RB_NoProtocol.Text = "无协议";
+            this.RB_NoProtocol.UseVisualStyleBackColor = true;
             // 
             // BTN_ServerOpen
             // 
@@ -163,30 +257,6 @@
             this.BTN_ServerSend.Text = "发送";
             this.BTN_ServerSend.UseVisualStyleBackColor = true;
             this.BTN_ServerSend.Click += new System.EventHandler(this.BTN_ServerSend_Click);
-            // 
-            // RB_ServerHex
-            // 
-            this.RB_ServerHex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.RB_ServerHex.AutoSize = true;
-            this.RB_ServerHex.Location = new System.Drawing.Point(713, 56);
-            this.RB_ServerHex.Name = "RB_ServerHex";
-            this.RB_ServerHex.Size = new System.Drawing.Size(48, 21);
-            this.RB_ServerHex.TabIndex = 5;
-            this.RB_ServerHex.Text = "Hex";
-            this.RB_ServerHex.UseVisualStyleBackColor = true;
-            // 
-            // RB_ServerUTF8
-            // 
-            this.RB_ServerUTF8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.RB_ServerUTF8.AutoSize = true;
-            this.RB_ServerUTF8.Checked = true;
-            this.RB_ServerUTF8.Location = new System.Drawing.Point(713, 29);
-            this.RB_ServerUTF8.Name = "RB_ServerUTF8";
-            this.RB_ServerUTF8.Size = new System.Drawing.Size(55, 21);
-            this.RB_ServerUTF8.TabIndex = 4;
-            this.RB_ServerUTF8.TabStop = true;
-            this.RB_ServerUTF8.Text = "UTF8";
-            this.RB_ServerUTF8.UseVisualStyleBackColor = true;
             // 
             // TB_ServerSend
             // 
@@ -290,7 +360,7 @@
             this.TSTB_ServerIP.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.TSTB_ServerIP.Name = "TSTB_ServerIP";
             this.TSTB_ServerIP.Size = new System.Drawing.Size(100, 25);
-            this.TSTB_ServerIP.Text = "192.168.1.15";
+            this.TSTB_ServerIP.Text = "192.168.1.10";
             // 
             // TSL_ServerIP
             // 
@@ -613,7 +683,7 @@
             this.TP_ModbusTCP.Padding = new System.Windows.Forms.Padding(3);
             this.TP_ModbusTCP.Size = new System.Drawing.Size(791, 420);
             this.TP_ModbusTCP.TabIndex = 4;
-            this.TP_ModbusTCP.Text = "ModbusTCP";
+            this.TP_ModbusTCP.Text = "ModbusTCPSlave";
             this.TP_ModbusTCP.UseVisualStyleBackColor = true;
             // 
             // BTN_DisplayRegister
@@ -790,6 +860,10 @@
             // 
             // TP_FinsTCPServer
             // 
+            this.TP_FinsTCPServer.Controls.Add(this.GB_FinsServerHArea);
+            this.TP_FinsTCPServer.Controls.Add(this.GB_FinsServerDArea);
+            this.TP_FinsTCPServer.Controls.Add(this.GB_FinsServerWArea);
+            this.TP_FinsTCPServer.Controls.Add(this.LB_DArea);
             this.TP_FinsTCPServer.Controls.Add(this.BTN_StopFins);
             this.TP_FinsTCPServer.Controls.Add(this.BTN_StartFins);
             this.TP_FinsTCPServer.Location = new System.Drawing.Point(4, 24);
@@ -800,8 +874,18 @@
             this.TP_FinsTCPServer.Text = "FinsTCPServer";
             this.TP_FinsTCPServer.UseVisualStyleBackColor = true;
             // 
+            // LB_DArea
+            // 
+            this.LB_DArea.AutoSize = true;
+            this.LB_DArea.Location = new System.Drawing.Point(739, 84);
+            this.LB_DArea.Name = "LB_DArea";
+            this.LB_DArea.Size = new System.Drawing.Size(43, 17);
+            this.LB_DArea.TabIndex = 0;
+            this.LB_DArea.Text = "label1";
+            // 
             // BTN_StopFins
             // 
+            this.BTN_StopFins.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BTN_StopFins.Location = new System.Drawing.Point(693, 35);
             this.BTN_StopFins.Name = "BTN_StopFins";
             this.BTN_StopFins.Size = new System.Drawing.Size(92, 23);
@@ -811,12 +895,46 @@
             // 
             // BTN_StartFins
             // 
+            this.BTN_StartFins.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.BTN_StartFins.Location = new System.Drawing.Point(693, 6);
             this.BTN_StartFins.Name = "BTN_StartFins";
             this.BTN_StartFins.Size = new System.Drawing.Size(92, 23);
             this.BTN_StartFins.TabIndex = 0;
             this.BTN_StartFins.Text = "返回Fins报文";
             this.BTN_StartFins.UseVisualStyleBackColor = true;
+            // 
+            // GB_FinsServerWArea
+            // 
+            this.GB_FinsServerWArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.GB_FinsServerWArea.Location = new System.Drawing.Point(6, 6);
+            this.GB_FinsServerWArea.Name = "GB_FinsServerWArea";
+            this.GB_FinsServerWArea.Size = new System.Drawing.Size(200, 406);
+            this.GB_FinsServerWArea.TabIndex = 2;
+            this.GB_FinsServerWArea.TabStop = false;
+            this.GB_FinsServerWArea.Text = "W区";
+            // 
+            // GB_FinsServerDArea
+            // 
+            this.GB_FinsServerDArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.GB_FinsServerDArea.Location = new System.Drawing.Point(212, 6);
+            this.GB_FinsServerDArea.Name = "GB_FinsServerDArea";
+            this.GB_FinsServerDArea.Size = new System.Drawing.Size(200, 406);
+            this.GB_FinsServerDArea.TabIndex = 3;
+            this.GB_FinsServerDArea.TabStop = false;
+            this.GB_FinsServerDArea.Text = "D区";
+            // 
+            // GB_FinsServerHArea
+            // 
+            this.GB_FinsServerHArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.GB_FinsServerHArea.Location = new System.Drawing.Point(418, 6);
+            this.GB_FinsServerHArea.Name = "GB_FinsServerHArea";
+            this.GB_FinsServerHArea.Size = new System.Drawing.Size(200, 406);
+            this.GB_FinsServerHArea.TabIndex = 4;
+            this.GB_FinsServerHArea.TabStop = false;
+            this.GB_FinsServerHArea.Text = "H区";
             // 
             // Communications
             // 
@@ -830,6 +948,10 @@
             this.TC_Communications.ResumeLayout(false);
             this.TP_TCPServer.ResumeLayout(false);
             this.TP_TCPServer.PerformLayout();
+            this.GB_ShowCode.ResumeLayout(false);
+            this.GB_ShowCode.PerformLayout();
+            this.GB_Protocol.ResumeLayout(false);
+            this.GB_Protocol.PerformLayout();
             this.TS_TCPServer.ResumeLayout(false);
             this.TS_TCPServer.PerformLayout();
             this.TP_TCPClient.ResumeLayout(false);
@@ -845,6 +967,7 @@
             this.GB_DataInput.ResumeLayout(false);
             this.GB_DataInput.PerformLayout();
             this.TP_FinsTCPServer.ResumeLayout(false);
+            this.TP_FinsTCPServer.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -915,5 +1038,14 @@
         private TabPage TP_FinsTCPServer;
         private Button BTN_StopFins;
         private Button BTN_StartFins;
+        private GroupBox GB_ShowCode;
+        private GroupBox GB_Protocol;
+        private RadioButton RB_NoProtocol;
+        private RadioButton RB_Fins;
+        private RadioButton RB_Modbus;
+        private Label LB_DArea;
+        private GroupBox GB_FinsServerHArea;
+        private GroupBox GB_FinsServerDArea;
+        private GroupBox GB_FinsServerWArea;
     }
 }
