@@ -18,7 +18,7 @@ namespace CommunicationsToolkit
         public byte[] DArea;
         private readonly ConcurrentQueue<ClientData> cache = new();
 
-        public FinsTCPServer(int serverNode = 0, int wAreaLength = 100, int hAreaLength = 100, int dAreaLength = 100)
+        public FinsTCPServer(int serverNode = 0, int wAreaLength = 100, int hAreaLength = 2048, int dAreaLength = 2048)
         {
             Connection = new SocketConnection(10240);
             ServerNode = serverNode;
@@ -27,7 +27,7 @@ namespace CommunicationsToolkit
             DArea = new byte[dAreaLength * 2];
             Connection.ReceiveFromClient += MessageHandling;
             Task.Run(MessageRespond);
-            byte[] bom = WordByteReverse(Encoding.ASCII.GetBytes("01151:2;"));
+            byte[] bom = WordByteReverse(Encoding.ASCII.GetBytes("01151:4;"));
             DArea[1] = 0x01; DArea[3] = 0x04; DArea[5] = 0x02;
             bom.CopyTo(DArea, 6);
         }
