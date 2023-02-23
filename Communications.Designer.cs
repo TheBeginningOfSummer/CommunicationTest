@@ -96,12 +96,12 @@
             this.LB_地址显示范围 = new System.Windows.Forms.Label();
             this.TB_ModbusReceive = new System.Windows.Forms.TextBox();
             this.TP_FinsTCPServer = new System.Windows.Forms.TabPage();
+            this.GB_FinsServerHArea = new System.Windows.Forms.GroupBox();
+            this.GB_FinsServerDArea = new System.Windows.Forms.GroupBox();
+            this.GB_FinsServerWArea = new System.Windows.Forms.GroupBox();
             this.LB_DArea = new System.Windows.Forms.Label();
             this.BTN_StopFins = new System.Windows.Forms.Button();
             this.BTN_StartFins = new System.Windows.Forms.Button();
-            this.GB_FinsServerWArea = new System.Windows.Forms.GroupBox();
-            this.GB_FinsServerDArea = new System.Windows.Forms.GroupBox();
-            this.GB_FinsServerHArea = new System.Windows.Forms.GroupBox();
             this.TC_Communications.SuspendLayout();
             this.TP_TCPServer.SuspendLayout();
             this.GB_ShowCode.SuspendLayout();
@@ -346,7 +346,7 @@
             this.TSTB_ServerPort.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.TSTB_ServerPort.Name = "TSTB_ServerPort";
             this.TSTB_ServerPort.Size = new System.Drawing.Size(60, 25);
-            this.TSTB_ServerPort.Text = "502";
+            this.TSTB_ServerPort.Text = "9600";
             // 
             // TSL_ServerPort
             // 
@@ -874,6 +874,39 @@
             this.TP_FinsTCPServer.Text = "FinsTCPServer";
             this.TP_FinsTCPServer.UseVisualStyleBackColor = true;
             // 
+            // GB_FinsServerHArea
+            // 
+            this.GB_FinsServerHArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.GB_FinsServerHArea.Location = new System.Drawing.Point(418, 6);
+            this.GB_FinsServerHArea.Name = "GB_FinsServerHArea";
+            this.GB_FinsServerHArea.Size = new System.Drawing.Size(200, 406);
+            this.GB_FinsServerHArea.TabIndex = 4;
+            this.GB_FinsServerHArea.TabStop = false;
+            this.GB_FinsServerHArea.Text = "H区";
+            // 
+            // GB_FinsServerDArea
+            // 
+            this.GB_FinsServerDArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.GB_FinsServerDArea.Location = new System.Drawing.Point(212, 6);
+            this.GB_FinsServerDArea.Name = "GB_FinsServerDArea";
+            this.GB_FinsServerDArea.Size = new System.Drawing.Size(200, 406);
+            this.GB_FinsServerDArea.TabIndex = 3;
+            this.GB_FinsServerDArea.TabStop = false;
+            this.GB_FinsServerDArea.Text = "D区";
+            // 
+            // GB_FinsServerWArea
+            // 
+            this.GB_FinsServerWArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.GB_FinsServerWArea.Location = new System.Drawing.Point(6, 6);
+            this.GB_FinsServerWArea.Name = "GB_FinsServerWArea";
+            this.GB_FinsServerWArea.Size = new System.Drawing.Size(200, 406);
+            this.GB_FinsServerWArea.TabIndex = 2;
+            this.GB_FinsServerWArea.TabStop = false;
+            this.GB_FinsServerWArea.Text = "W区";
+            // 
             // LB_DArea
             // 
             this.LB_DArea.AutoSize = true;
@@ -902,39 +935,6 @@
             this.BTN_StartFins.TabIndex = 0;
             this.BTN_StartFins.Text = "返回Fins报文";
             this.BTN_StartFins.UseVisualStyleBackColor = true;
-            // 
-            // GB_FinsServerWArea
-            // 
-            this.GB_FinsServerWArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.GB_FinsServerWArea.Location = new System.Drawing.Point(6, 6);
-            this.GB_FinsServerWArea.Name = "GB_FinsServerWArea";
-            this.GB_FinsServerWArea.Size = new System.Drawing.Size(200, 406);
-            this.GB_FinsServerWArea.TabIndex = 2;
-            this.GB_FinsServerWArea.TabStop = false;
-            this.GB_FinsServerWArea.Text = "W区";
-            // 
-            // GB_FinsServerDArea
-            // 
-            this.GB_FinsServerDArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.GB_FinsServerDArea.Location = new System.Drawing.Point(212, 6);
-            this.GB_FinsServerDArea.Name = "GB_FinsServerDArea";
-            this.GB_FinsServerDArea.Size = new System.Drawing.Size(200, 406);
-            this.GB_FinsServerDArea.TabIndex = 3;
-            this.GB_FinsServerDArea.TabStop = false;
-            this.GB_FinsServerDArea.Text = "D区";
-            // 
-            // GB_FinsServerHArea
-            // 
-            this.GB_FinsServerHArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.GB_FinsServerHArea.Location = new System.Drawing.Point(418, 6);
-            this.GB_FinsServerHArea.Name = "GB_FinsServerHArea";
-            this.GB_FinsServerHArea.Size = new System.Drawing.Size(200, 406);
-            this.GB_FinsServerHArea.TabIndex = 4;
-            this.GB_FinsServerHArea.TabStop = false;
-            this.GB_FinsServerHArea.Text = "H区";
             // 
             // Communications
             // 

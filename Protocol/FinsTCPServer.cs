@@ -27,9 +27,15 @@ namespace CommunicationsToolkit
             DArea = new byte[dAreaLength * 2];
             Connection.ReceiveFromClient += MessageHandling;
             Task.Run(MessageRespond);
+            Initilize();
+        }
+
+        public void Initilize()
+        {
             byte[] bom = WordByteReverse(Encoding.ASCII.GetBytes("01151:4;"));
             DArea[1] = 0x01; DArea[3] = 0x04; DArea[5] = 0x02;
             bom.CopyTo(DArea, 6);
+            HArea[0] = 0xFF; HArea[1] = 0xFF;
         }
 
         public void MessageHandling(Socket client, byte[] data)
