@@ -188,7 +188,6 @@ namespace CommunicationsToolkit
                 TSB_StopListening.Enabled = true;
                 MessageBox.Show("监听成功", "服务端");
             }
-            LB_DArea.Text = Encoding.ASCII.GetString(FinsTCPServer.WordByteReverse(DataConverter.HexStringToBytes("313035313A313B33")));
         }
 
         private void TSB_StopListening_Click(object sender, EventArgs e)
@@ -423,8 +422,12 @@ namespace CommunicationsToolkit
             if (maxAddress < minAddress) return;
             UpdateLabels();
         }
+
         #endregion
 
-
+        private void BTN_ShowASCIICode_Click(object sender, EventArgs e)
+        {
+            LB_ASCII.Text = Encoding.ASCII.GetString(FinsTCPServer.WordByteReverse(DataConverter.HexStringToBytes(TB_ASCIICode.Text)));
+        }
     }
 }

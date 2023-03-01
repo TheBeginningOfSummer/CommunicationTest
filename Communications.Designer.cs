@@ -99,9 +99,11 @@
             this.GB_FinsServerHArea = new System.Windows.Forms.GroupBox();
             this.GB_FinsServerDArea = new System.Windows.Forms.GroupBox();
             this.GB_FinsServerWArea = new System.Windows.Forms.GroupBox();
-            this.LB_DArea = new System.Windows.Forms.Label();
+            this.LB_ASCII = new System.Windows.Forms.Label();
             this.BTN_StopFins = new System.Windows.Forms.Button();
             this.BTN_StartFins = new System.Windows.Forms.Button();
+            this.BTN_ShowASCIICode = new System.Windows.Forms.Button();
+            this.TB_ASCIICode = new System.Windows.Forms.TextBox();
             this.TC_Communications.SuspendLayout();
             this.TP_TCPServer.SuspendLayout();
             this.GB_ShowCode.SuspendLayout();
@@ -860,10 +862,12 @@
             // 
             // TP_FinsTCPServer
             // 
+            this.TP_FinsTCPServer.Controls.Add(this.TB_ASCIICode);
+            this.TP_FinsTCPServer.Controls.Add(this.BTN_ShowASCIICode);
             this.TP_FinsTCPServer.Controls.Add(this.GB_FinsServerHArea);
             this.TP_FinsTCPServer.Controls.Add(this.GB_FinsServerDArea);
             this.TP_FinsTCPServer.Controls.Add(this.GB_FinsServerWArea);
-            this.TP_FinsTCPServer.Controls.Add(this.LB_DArea);
+            this.TP_FinsTCPServer.Controls.Add(this.LB_ASCII);
             this.TP_FinsTCPServer.Controls.Add(this.BTN_StopFins);
             this.TP_FinsTCPServer.Controls.Add(this.BTN_StartFins);
             this.TP_FinsTCPServer.Location = new System.Drawing.Point(4, 24);
@@ -907,19 +911,19 @@
             this.GB_FinsServerWArea.TabStop = false;
             this.GB_FinsServerWArea.Text = "W区";
             // 
-            // LB_DArea
+            // LB_ASCII
             // 
-            this.LB_DArea.AutoSize = true;
-            this.LB_DArea.Location = new System.Drawing.Point(739, 84);
-            this.LB_DArea.Name = "LB_DArea";
-            this.LB_DArea.Size = new System.Drawing.Size(43, 17);
-            this.LB_DArea.TabIndex = 0;
-            this.LB_DArea.Text = "label1";
+            this.LB_ASCII.AutoSize = true;
+            this.LB_ASCII.Location = new System.Drawing.Point(630, 6);
+            this.LB_ASCII.Name = "LB_ASCII";
+            this.LB_ASCII.Size = new System.Drawing.Size(32, 17);
+            this.LB_ASCII.TabIndex = 0;
+            this.LB_ASCII.Text = "数据";
             // 
             // BTN_StopFins
             // 
             this.BTN_StopFins.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BTN_StopFins.Location = new System.Drawing.Point(693, 35);
+            this.BTN_StopFins.Location = new System.Drawing.Point(696, 389);
             this.BTN_StopFins.Name = "BTN_StopFins";
             this.BTN_StopFins.Size = new System.Drawing.Size(92, 23);
             this.BTN_StopFins.TabIndex = 1;
@@ -929,12 +933,31 @@
             // BTN_StartFins
             // 
             this.BTN_StartFins.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BTN_StartFins.Location = new System.Drawing.Point(693, 6);
+            this.BTN_StartFins.Location = new System.Drawing.Point(696, 360);
             this.BTN_StartFins.Name = "BTN_StartFins";
             this.BTN_StartFins.Size = new System.Drawing.Size(92, 23);
             this.BTN_StartFins.TabIndex = 0;
             this.BTN_StartFins.Text = "返回Fins报文";
             this.BTN_StartFins.UseVisualStyleBackColor = true;
+            // 
+            // BTN_ShowASCIICode
+            // 
+            this.BTN_ShowASCIICode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BTN_ShowASCIICode.Location = new System.Drawing.Point(630, 68);
+            this.BTN_ShowASCIICode.Name = "BTN_ShowASCIICode";
+            this.BTN_ShowASCIICode.Size = new System.Drawing.Size(158, 23);
+            this.BTN_ShowASCIICode.TabIndex = 5;
+            this.BTN_ShowASCIICode.Text = "显示ASCII编码";
+            this.BTN_ShowASCIICode.UseVisualStyleBackColor = true;
+            this.BTN_ShowASCIICode.Click += new System.EventHandler(this.BTN_ShowASCIICode_Click);
+            // 
+            // TB_ASCIICode
+            // 
+            this.TB_ASCIICode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.TB_ASCIICode.Location = new System.Drawing.Point(630, 39);
+            this.TB_ASCIICode.Name = "TB_ASCIICode";
+            this.TB_ASCIICode.Size = new System.Drawing.Size(158, 23);
+            this.TB_ASCIICode.TabIndex = 6;
             // 
             // Communications
             // 
@@ -1043,9 +1066,11 @@
         private RadioButton RB_NoProtocol;
         private RadioButton RB_Fins;
         private RadioButton RB_Modbus;
-        private Label LB_DArea;
+        private Label LB_ASCII;
         private GroupBox GB_FinsServerHArea;
         private GroupBox GB_FinsServerDArea;
         private GroupBox GB_FinsServerWArea;
+        private TextBox TB_ASCIICode;
+        private Button BTN_ShowASCIICode;
     }
 }

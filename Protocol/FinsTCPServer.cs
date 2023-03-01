@@ -35,7 +35,7 @@ namespace CommunicationsToolkit
             byte[] bom = WordByteReverse(Encoding.ASCII.GetBytes("01151:4;"));
             DArea[1] = 0x01; DArea[3] = 0x04; DArea[5] = 0x02;
             bom.CopyTo(DArea, 6);
-            HArea[0] = 0xFF; HArea[1] = 0xFF;
+            HArea[0] = 0xFF; HArea[1] = 0xFF; HArea[20] = 0xFF; HArea[21] = 0xFE; HArea[24] = 0xFF; HArea[25] = 0xFD;
         }
 
         public void MessageHandling(Socket client, byte[] data)
